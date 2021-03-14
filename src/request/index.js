@@ -8,21 +8,28 @@
  */
 import axios from 'axios';
 const { Toast } = 'vant';
+
+if( process.env.NODE_ENV === 'production'){
+    axios.defaults.baseURL = 'https://www.cjssy.cn:20013'
+}else{
+    axios.defaults.baseURL ='/'
+}
+
+const baseUrl = axios.defaults.baseURL;
+
 // 创建axios实例
 const service = axios.create({
-    baseURL: process.env.NODE_ENV === 'production' ? 'https://www.cjssy.cn:20013' : '/', // api 的 base_url
     timeout: 10000, // 请求超时时间
     headers: {
         post: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;multipart/form-data',
         },
     },
-});
+}); 
+console.log(service.defaults)
 // 请求拦截器
 service.interceptors.request.use(
-    config => {
-        // const token = store.state.token
-        // token && (config.headers.Authorization = token)
+    config => { 
         return config;
     },
     error => {
@@ -32,12 +39,13 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     response => {
+        console.log('res',response) 
         if (response.status === 200) {
-            if (response.data.Successed) {
+            if (response.data.Succeeded) {
                 return Promise.resolve(response);
             } else {
                 Toast.fail({ 
-                    message: response.data.Errors,
+                    message: response.data.Errors || '服务器内部错误',
                     duration: 2000,
                 });
                 return Promise.reject(response);
@@ -89,7 +97,7 @@ service.interceptors.response.use(
  */
 function get(url, params) {
     return new Promise((resolve, reject) => {
-        axios
+        service
             .get(url, {
                 params: params,
             })
@@ -108,7 +116,7 @@ function get(url, params) {
  */
 function post(url, data) {
     return new Promise((resolve, reject) => {
-        axios
+        service
             .post(url, data)
             .then(res => {
                 resolve(res.data);
@@ -124,7 +132,7 @@ function post(url, data) {
  */
 function request(config) {
     return new Promise((resolve, reject) => {
-        axios
+        service
             .request(config)
             .then(res => {
                 resolve(res.data);
@@ -134,5 +142,4 @@ function request(config) {
             });
     });
 }
-const baseUrl = axios.defaults.baseURL;
 export default { get, post, request, baseUrl };

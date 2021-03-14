@@ -26,9 +26,9 @@ import $http from '../index';
 /**
  * @description 获取所有景点
  */
-const GetSpots = params => {
+const GetSpots = params => { 
   return $http.request({
-    url: '/proxy/api/JQ_ScenicSpot/GetBackFacilitiesList',
+    url: '/api/JQ_ScenicSpot/GetBackFacilitiesList',
     method: 'get',
     params,
   });
@@ -39,7 +39,7 @@ const GetSpots = params => {
  */
 const GetDistinguishPoleData = () => {
   return $http.request({
-    url: '/proxy/api/BD_DistinguishPole/GetDistinguishPoleData',
+    url: '/api/BD_DistinguishPole/GetDistinguishPoleData',
     method: 'get',
   });
 };
@@ -50,7 +50,7 @@ const GetDistinguishPoleData = () => {
  */
 const getSpotInfoById = params => {
   return $http.request({
-    url: '/proxy/api/JQ_ScenicSpot/GetScreenScenicSpotInfo',
+    url: '/api/JQ_ScenicSpot/GetScreenScenicSpotInfo',
     method: 'get',
     params,
   });
